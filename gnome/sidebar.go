@@ -9,7 +9,7 @@ type Sidebar struct {
 	stack *adw.ViewStack
 }
 
-func CreateSideBar(content *Content) *Sidebar {
+func CreateSidebar(content *Content) *Sidebar {
 	stack := buildStackForInnerSidebar(content)
 	innerSidebarList := buildInnerSidebarList(content, stack)
 	sidebar := adw.NewNavigationPage(innerSidebarList, "Меню")

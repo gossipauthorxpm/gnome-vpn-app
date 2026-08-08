@@ -24,7 +24,7 @@ func interfaceUp(app *adw.Application) {
 	content := CreateContent()
 
 	toolbar := ToolbarCreate()
-	sidebar := CreateSideBar(content)
+	sidebar := CreateSidebar(content)
 
 	splitView := adw.NewNavigationSplitView()
 	splitView.SetSidebar(sidebar.GetView())

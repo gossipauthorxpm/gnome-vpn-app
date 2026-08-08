@@ -17,10 +17,6 @@ func CreateContent() *Content {
 	return &Content{connection: connectionPage, routing: routingPage}
 }
 
-func (self *Content) GetStartPage() *pages.Page {
-	return self.GetConnectionPage()
-}
-
 func (self *Content) GetPages() []pages.Page {
 	return []pages.Page{self.connection, self.routing}
 }
