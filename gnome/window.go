@@ -5,6 +5,6 @@ import "github.com/diamondburned/gotk4-adwaita/pkg/adw"
 func InitWindow(app *adw.Application) *adw.ApplicationWindow {
 	window := adw.NewApplicationWindow(&app.Application)
 	window.SetTitle("Gnome VPN")
-	window.SetDefaultSize(420, 240)
+	window.SetDefaultSize(800, 600)
 	return window
 }

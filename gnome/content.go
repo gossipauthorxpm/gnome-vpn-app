@@ -1,51 +1,34 @@
 package gnome
 
 import (
-	"github.com/diamondburned/gotk4-adwaita/pkg/adw"
-	"github.com/diamondburned/gotk4/pkg/gtk/v4"
+	"gossipauthorxpm.ru/vpn/gnome/pages"
+	"gossipauthorxpm.ru/vpn/gnome/pages/connection"
+	"gossipauthorxpm.ru/vpn/gnome/pages/routing"
 )
 
 type Content struct {
-	mainPage *adw.NavigationPage
+	connection pages.Page
+	routing    pages.Page
 }
 
 func CreateContent() *Content {
-	page := buildPage()
-	mainPage := adw.NewNavigationPage(page, "Главаня страница")
-	return &Content{mainPage: mainPage}
+	connectionPage := connection.Create()
+	routingPage := routing.Create()
+	return &Content{connection: connectionPage, routing: routingPage}
 }
 
-func (self *Content) GetMainPage() *adw.NavigationPage {
-	return self.mainPage
+func (self *Content) GetStartPage() *pages.Page {
+	return self.GetConnectionPage()
 }
 
-func buildPage() *adw.PreferencesPage {
-	page := adw.NewPreferencesPage()
+func (self *Content) GetPages() []pages.Page {
+	return []pages.Page{self.connection, self.routing}
+}
 
-	group := adw.NewPreferencesGroup()
-	group.SetTitle("Общие")
-	group.SetDescription("Настройки внешнего вида и поведения")
+func (self *Content) GetConnectionPage() *pages.Page {
+	return &self.connection
+}
 
-	// Switch Row (Переключатель)
-	switchRow := adw.NewSwitchRow()
-	switchRow.SetTitle("Использовать темные цвета")
-	group.Add(switchRow)
-
-	// Combo Row (Выпадающий список)
-	comboRow := adw.NewComboRow()
-	comboRow.SetTitle("Выберите язык приложения")
-	strList := gtk.NewStringList([]string{"Русский", "English", "Deutsch"})
-	comboRow.SetModel(strList)
-	group.Add(comboRow)
-
-	// Action Row (Кликабельная строка)
-	actionRow := adw.NewActionRow()
-	actionRow.SetTitle("О программе")
-	actionRow.SetSubtitle("Лицензия и авторы")
-	actionRow.SetActivatable(true)
-	actionRow.AddSuffix(gtk.NewImageFromIconName("go-next-symbolic"))
-	group.Add(actionRow)
-
-	page.Add(group)
-	return page
+func (self *Content) GetRoutingPage() *pages.Page {
+	return &self.routing
 }

@@ -2,44 +2,46 @@ package gnome
 
 import (
 	"github.com/diamondburned/gotk4-adwaita/pkg/adw"
-	"github.com/diamondburned/gotk4/pkg/gtk/v4"
 )
 
 type Sidebar struct {
-	view *adw.NavigationPage
+	view  *adw.NavigationPage
+	stack *adw.ViewStack
 }
 
-func CreateSideBar() *Sidebar {
-	listBoxWidget := buildSidebarList()
-	sidebar := adw.NewNavigationPage(listBoxWidget, "Меню")
-	return &Sidebar{view: sidebar}
+func CreateSideBar(content *Content) *Sidebar {
+	stack := buildStackForInnerSidebar(content)
+	innerSidebarList := buildInnerSidebarList(content, stack)
+	sidebar := adw.NewNavigationPage(innerSidebarList, "Меню")
+	return &Sidebar{view: sidebar, stack: stack}
 }
 
 func (self *Sidebar) GetView() *adw.NavigationPage {
 	return self.view
 }
 
-func (self *Sidebar) Collapse() {
-
+func (self *Sidebar) GetStack() *adw.ViewStack {
+	return self.stack
 }
 
-func (self *Sidebar) Expose() {
+func buildStackForInnerSidebar(content *Content) *adw.ViewStack {
+	stack := adw.NewViewStack()
 
+	listPages := content.GetPages()
+
+	for _, page := range listPages {
+		page.InjectInSidebar(stack)
+	}
+
+	return stack
 }
 
-func buildSidebarList() *adw.PreferencesGroup {
+func buildInnerSidebarList(content *Content, stack *adw.ViewStack) *adw.NavigationPage {
+	stack.SetVisibleChildName("connection")
 
-	group := adw.NewPreferencesGroup() // todo: Посмотерть, возможно есть уже готовый компонент для списка сайдбара. Пример настройки Gnome
+	sidebar := adw.NewViewSwitcherSidebar()
+	sidebar.SetStack(stack)
 
-	connection := gtk.NewButtonWithLabel("Подключение")
-	routing := gtk.NewButtonWithLabel("Роутинг")
-	provider := gtk.NewButtonWithLabel("Провайдер")
-	settings := gtk.NewButtonWithLabel("Настройки")
-
-	group.Add(connection)
-	group.Add(routing)
-	group.Add(provider)
-	group.Add(settings)
-
-	return group
+	page := adw.NewNavigationPage(sidebar, "Меню")
+	return page
 }

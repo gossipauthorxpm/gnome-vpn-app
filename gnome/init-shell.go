@@ -21,13 +21,14 @@ func initGnome(applicationSid string, osArgs []string) {
 func interfaceUp(app *adw.Application) {
 	window := InitWindow(app)
 
-	toolbar := ToolbarCreate()
-	sidebar := CreateSideBar()
 	content := CreateContent()
+
+	toolbar := ToolbarCreate()
+	sidebar := CreateSideBar(content)
 
 	splitView := adw.NewNavigationSplitView()
 	splitView.SetSidebar(sidebar.GetView())
-	splitView.SetContent(content.GetMainPage())
+	splitView.SetContent(adw.NewNavigationPage(sidebar.GetStack(), "Контент"))
 
 	toastOverlay := adw.NewToastOverlay()
 	toastOverlay.SetChild(splitView)
