@@ -4,8 +4,6 @@ import (
 	"os"
 
 	"github.com/diamondburned/gotk4-adwaita/pkg/adw"
-	"github.com/diamondburned/gotk4/pkg/gtk/v4"
-	"gossipauthorxpm.ru/vpn/gnome/buttons"
 )
 
 func InitShell(applicationSid string, osArgs []string) {
@@ -23,25 +21,19 @@ func initGnome(applicationSid string, osArgs []string) {
 func interfaceUp(app *adw.Application) {
 	window := InitWindow(app)
 
-	label := gtk.NewLabel("Нажмите кнопку")
+	toolbar := ToolbarCreate()
+	sidebar := CreateSideBar()
+	content := CreateContent()
 
-	button := buttons.Init(func() {
-		label.SetLabel("Привет, GNOME!")
-	})
+	splitView := adw.NewNavigationSplitView()
+	splitView.SetSidebar(sidebar.GetView())
+	splitView.SetContent(content.GetMainPage())
 
-	content := gtk.NewBox(gtk.OrientationVertical, 12)
-	content.SetHAlign(gtk.AlignCenter)
-	content.SetVAlign(gtk.AlignCenter)
+	toastOverlay := adw.NewToastOverlay()
+	toastOverlay.SetChild(splitView)
 
-	content.Append(label)
-	content.Append(button)
+	toolbar.GetView().SetContent(toastOverlay)
 
-	headerBar := adw.NewHeaderBar()
-
-	toolbarView := adw.NewToolbarView()
-	toolbarView.AddTopBar(headerBar)
-	toolbarView.SetContent(content)
-
-	window.SetContent(toolbarView)
+	window.SetContent(toolbar.GetView())
 	window.Present()
 }
