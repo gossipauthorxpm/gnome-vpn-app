@@ -1,6 +1,8 @@
 package connection
 
 import (
+	"log"
+
 	"github.com/diamondburned/gotk4-adwaita/pkg/adw"
 	"gossipauthorxpm.ru/vpn/gnome/factory"
 )
@@ -32,16 +34,24 @@ func buildHeaderPage(page *adw.PreferencesPage) {
 	)
 
 	factory.UpSelectControlFactory().InjectButtonInSelectStack(
-		factory.SelectContolButtonParams{Title: "Россия"}, stack,
+		factory.SelectContolButtonParams{Title: "Россия", Name: "russia-id"}, stack,
 	)
 
 	factory.UpSelectControlFactory().InjectButtonInSelectStack(
-		factory.SelectContolButtonParams{Title: "Сша"}, stack,
+		factory.SelectContolButtonParams{Title: "Сша", Name: "usa-id"}, stack,
 	)
 
 	factory.UpSelectControlFactory().InjectButtonInSelectStack(
-		factory.SelectContolButtonParams{Title: "Китай"}, stack,
+		factory.SelectContolButtonParams{Title: "Китай", Name: "china-id"}, stack,
 	)
+
+	factory.UpSelectControlFactory().InjectCallbackOnChangeInSelectControl(func(vsp *adw.ViewStackPage) {
+		log.Printf(
+			"selected: name=%s title=%s",
+			vsp.Name(),
+			vsp.Title(),
+		)
+	}, selectControl)
 
 	group.Add(selectControl)
 	page.Add(group)
