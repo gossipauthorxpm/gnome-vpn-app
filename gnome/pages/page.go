@@ -7,3 +7,7 @@ type Page interface {
 	GetNavigationPage() *adw.NavigationPage
 	InjectInSidebar(stack *adw.ViewStack)
 }
+
+type PageViewBuilder interface {
+	BuildPageView() *adw.PreferencesPage
+}

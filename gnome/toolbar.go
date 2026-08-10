@@ -11,7 +11,6 @@ type ToolBar struct {
 func ToolbarCreate() *ToolBar {
 	toolbarView := adw.NewToolbarView()
 	header := adw.NewHeaderBar()
-	header.SetTitleWidget(adw.NewWindowTitle("GNOME", ""))
 
 	toolbarView.AddTopBar(header)
 
