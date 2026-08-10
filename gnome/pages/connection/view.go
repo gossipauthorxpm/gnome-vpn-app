@@ -33,6 +33,7 @@ func buildHeaderPage(page *adw.PreferencesPage) {
 		factory.SelectContolCreateParams{Title: "Выберите сервер подключения", Subtitle: ""},
 	)
 
+	// todo: Напрашивается цикл. Причем данные приходят из вне (http из VLESS подписки)
 	factory.UpSelectControlFactory().InjectButtonInSelectStack(
 		factory.SelectContolButtonParams{Title: "Россия", Name: "russia-id"}, stack,
 	)
@@ -45,6 +46,7 @@ func buildHeaderPage(page *adw.PreferencesPage) {
 		factory.SelectContolButtonParams{Title: "Китай", Name: "china-id"}, stack,
 	)
 
+	// todo: callback изменения работает неразрывно с передаваемыми данными. Желательно объеденить в одну структуру, чтобы не потерять в массиве кода
 	factory.UpSelectControlFactory().InjectCallbackOnChangeInSelectControl(func(vsp *adw.ViewStackPage) {
 		log.Printf(
 			"selected: name=%s title=%s",
