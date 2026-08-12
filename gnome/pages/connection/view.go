@@ -4,6 +4,8 @@ import (
 	"log"
 
 	"github.com/diamondburned/gotk4-adwaita/pkg/adw"
+	"gossipauthorxpm.ru/vpn/adapter"
+	"gossipauthorxpm.ru/vpn/adapter/servers"
 	"gossipauthorxpm.ru/vpn/gnome/factory"
 )
 
@@ -33,30 +35,26 @@ func buildHeaderPage(page *adw.PreferencesPage) {
 		factory.SelectContolCreateParams{Title: "Выберите сервер подключения", Subtitle: ""},
 	)
 
-	// todo: Напрашивается цикл. Причем данные приходят из вне (http из VLESS подписки)
-	factory.UpSelectControlFactory().InjectButtonInSelectStack(
-		factory.SelectContolButtonParams{Title: "Россия", Name: "russia-id"}, stack,
-	)
+	buildSelectServerInStack(adapter.ServerController.GetSubscibtionServers(adapter.SubscriptionController), stack)
 
-	factory.UpSelectControlFactory().InjectButtonInSelectStack(
-		factory.SelectContolButtonParams{Title: "Сша", Name: "usa-id"}, stack,
-	)
-
-	factory.UpSelectControlFactory().InjectButtonInSelectStack(
-		factory.SelectContolButtonParams{Title: "Китай", Name: "china-id"}, stack,
-	)
-
-	// todo: callback изменения работает неразрывно с передаваемыми данными. Желательно объеденить в одну структуру, чтобы не потерять в массиве кода
 	factory.UpSelectControlFactory().InjectCallbackOnChangeInSelectControl(func(vsp *adw.ViewStackPage) {
-		log.Printf(
-			"selected: name=%s title=%s",
-			vsp.Name(),
-			vsp.Title(),
-		)
+		server := &servers.ServerVisual{Name: vsp.Name(), Title: vsp.Title()}
+		adapter.ServerController.ChangeServerCallback(server)
 	}, selectControl)
 
 	group.Add(selectControl)
 	page.Add(group)
+}
+
+func buildSelectServerInStack(servers []servers.ServerVisual, stack *adw.ViewStack) {
+	for _, server := range servers {
+		error := factory.UpSelectControlFactory().InjectButtonInSelectStack(
+			factory.SelectContolButtonParams{Title: server.Title, Name: server.Name}, stack,
+		)
+		if error != nil {
+			log.Fatalf(error.Error())
+		}
+	}
 }
 
 func buildCenterPage(page *adw.PreferencesPage) {

@@ -1,12 +1,9 @@
 package adapter
 
 import (
-	"fmt"
-
-	"gossipauthorxpm.ru/vpn/gnome"
+	"gossipauthorxpm.ru/vpn/adapter/servers"
+	"gossipauthorxpm.ru/vpn/adapter/subscription"
 )
 
-func Setup(applicationSid string, osArgs []string) {
-	fmt.Println("Bootstrap") // todo: replace with app logger
-	gnome.InitShell(applicationSid, osArgs)
-}
+var SubscriptionController = &subscription.SubscriptionController{}
+var ServerController = &servers.ServersController{}

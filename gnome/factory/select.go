@@ -1,11 +1,10 @@
 package factory
 
 import (
-	"fmt"
-
 	"github.com/diamondburned/gotk4-adwaita/pkg/adw"
 	"github.com/diamondburned/gotk4/pkg/gtk/v4"
 	"gossipauthorxpm.ru/vpn/common"
+	"gossipauthorxpm.ru/vpn/common/errors"
 )
 
 type SelectContolCreateParams struct {
@@ -30,9 +29,9 @@ func (self *SelectControlFactory) CreateSelect(params SelectContolCreateParams) 
 	return selectControl, stack
 }
 
-func (self *SelectControlFactory) InjectButtonInSelectStack(params SelectContolButtonParams, stack *adw.ViewStack) error {
+func (self *SelectControlFactory) InjectButtonInSelectStack(params SelectContolButtonParams, stack *adw.ViewStack) *errors.Error {
 	if common.HasViewStackContainsName(stack, params.Name) {
-		return fmt.Errorf("%w: %q", common.DublicateIdError, params.Name)
+		return errors.CreateError("Не может быть несколько селектов с одинаковыми name", errors.RuntimeException)
 	}
 	content := gtk.NewBox(gtk.OrientationVertical, 0)
 	stack.AddTitled(content, params.Name, params.Title)

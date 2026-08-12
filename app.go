@@ -3,11 +3,11 @@ package main
 import (
 	"os"
 
-	"gossipauthorxpm.ru/vpn/adapter"
+	"gossipauthorxpm.ru/vpn/bootstrap"
 )
 
 const applicationSid = "gossipauthorxpm.ru.gnome-vpn"
 
 func main() {
-	adapter.Setup(applicationSid, os.Args)
+	bootstrap.Setup(applicationSid, os.Args)
 }
